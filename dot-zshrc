@@ -88,7 +88,7 @@ export LANG=en_US.UTF-8
 # else
 #   export EDITOR='mvim'
 # fi
-export EDITOR="vim"
+export EDITOR="nvim"
 export PATH="$HOME/.qlot/bin:$HOME/.emacs.d/bin:/opt/homebrew/opt/node@16/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/go/bin:$HOME/.local/bin:$PATH"
 
 # Compilation flags
