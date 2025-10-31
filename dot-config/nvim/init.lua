@@ -6,6 +6,7 @@ require("config.lazy")
 
 -- LSP
 vim.lsp.enable("gopls")
+vim.lsp.enable("cue")
 vim.diagnostic.config({ virtual_text = true })
 
 -- Keybindings
@@ -32,3 +33,5 @@ vim.o.foldlevel = 99
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.inccommand = "split"
+
+vim.cmd("au BufRead,BufNewFile *.tf set ft=hcl")

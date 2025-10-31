@@ -89,7 +89,7 @@ export LANG=en_US.UTF-8
 #   export EDITOR='mvim'
 # fi
 export EDITOR="nvim"
-export PATH="$HOME/.qlot/bin:$HOME/.emacs.d/bin:/opt/homebrew/opt/node@16/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/go/bin:$HOME/.local/bin:$PATH"
+export PATH="$HOME/go/bin:$$HOME/.qlot/bin:$HOME/.emacs.d/bin:/opt/homebrew/opt/node@16/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:${KREW_ROOT:-$HOME/.krew}/bin:HOME/.local/bin:$PATH"
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -108,6 +108,9 @@ export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 export KUBECONFIG=~/.kube/eks-config:~/.kube/config
 
 export PROMPT='$(aws_sso_prompt)$(kube_ps1) '$PROMPT
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
 
 # BEGIN_AWS_SSO_CLI
 
