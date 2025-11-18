@@ -3,7 +3,7 @@ zstyle :omz:alpha:lib:git async-prompt no
 #zstyle :omz:plugins:ssh-agent identities dev-key rolling-key staging-key git-key
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/peter.polacik/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -89,7 +89,7 @@ export LANG=en_US.UTF-8
 #   export EDITOR='mvim'
 # fi
 export EDITOR="nvim"
-export PATH="$HOME/go/bin:$$HOME/.qlot/bin:$HOME/.emacs.d/bin:/opt/homebrew/opt/node@16/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:${KREW_ROOT:-$HOME/.krew}/bin:HOME/.local/bin:$PATH"
+export PATH="$HOME/go/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:${KREW_ROOT:-$HOME/.krew}/bin:HOME/.local/bin:$PATH"
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
