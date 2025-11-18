@@ -7,6 +7,7 @@ require("config.lazy")
 -- LSP
 vim.lsp.enable("gopls")
 vim.lsp.enable("cue")
+vim.lsp.enable("vtsls")
 vim.diagnostic.config({ virtual_text = true })
 
 -- Keybindings
