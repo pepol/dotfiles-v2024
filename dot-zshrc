@@ -109,9 +109,6 @@ export KUBECONFIG=~/.kube/eks-config:~/.kube/config
 
 export PROMPT='$(aws_sso_prompt)$(kube_ps1) '$PROMPT
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
-
 # BEGIN_AWS_SSO_CLI
 
 # AWS SSO requires `bashcompinit` which needs to be enabled once and
@@ -160,3 +157,13 @@ aws_sso_prompt() {
 }
 
 autoload -Uz +X compinit && compinit
+
+# pnpm
+export PNPM_HOME="/Users/pepol/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+export PATH="$PNPM_HOME/nodejs_current/bin:$PATH"
