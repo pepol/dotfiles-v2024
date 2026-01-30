@@ -34,6 +34,7 @@ return {
         ["cursor-acp"] = {
           command = "pnpm",
           args = { "exec", "cursor-agent-acp" },
+          default_mode = "plan",
         },
       },
     },
