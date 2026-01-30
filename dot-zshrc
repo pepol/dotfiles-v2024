@@ -89,7 +89,7 @@ export LANG=en_US.UTF-8
 #   export EDITOR='mvim'
 # fi
 export EDITOR="nvim"
-export PATH="$HOME/go/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:${KREW_ROOT:-$HOME/.krew}/bin:HOME/.local/bin:$PATH"
+export PATH="$HOME/go/bin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/.local/bin:$PATH"
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"

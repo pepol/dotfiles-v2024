@@ -116,4 +116,13 @@ return {
       }
     end,
   },
+  {
+    "comatory/gh-co.nvim",
+    config = function()
+      local wk = require("which-key")
+      wk.add {
+        { '<leader>gho', '<cmd>GhCoWho<cr>', desc = 'Code Owners' },
+      }
+    end
+  },
 }
