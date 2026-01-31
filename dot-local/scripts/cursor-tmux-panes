@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Output: pane_id pane_index pane_left pane_top pane_right pane_bottom (per line)
+# Whitelisted for cursor-agent via ~/.cursor/cli-config.json
+exec tmux list-panes -F '#{pane_id} #{pane_index} #{pane_left} #{pane_top} #{pane_right} #{pane_bottom}'

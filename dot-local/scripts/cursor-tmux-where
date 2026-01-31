@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Output: session_name window_index window_name pane_index pane_id
+# Whitelisted for cursor-agent via ~/.cursor/cli-config.json
+exec tmux display-message -p '#{session_name} #{window_index} #{window_name} #{pane_index} #{pane_id}'
