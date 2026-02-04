@@ -6,11 +6,23 @@ alwaysApply: true
 
 # Tmux session context
 
-The agent runs inside a tmux pane. Determine your location by running tmux commands in the terminal.
+The agent runs inside a tmux pane. Determine your location and interact with tmux using either the tmux MCP server (when available) or fallback shell commands.
 
-## Commands to determine agent location
+## Preferred: tmux MCP server
 
-Ensure `~/.local/scripts` is in PATH, then run these whitelisted wrappers:
+When the **tmux MCP server** is configured and available on this machine, use its tools to get context and run commands:
+
+- **Sessions:** `list-sessions` to see all sessions; `find-session` by name to get a session ID.
+- **Windows:** `list-windows` with a session ID to get window list and IDs.
+- **Panes:** `list-panes` with a window ID to get panes and geometry (use pane positions to resolve left/right/up/down).
+- **Content:** `capture-pane` with a pane ID to read pane output (optionally with `lines` and `colors`).
+- **Run commands:** `execute-command` with a pane ID to run commands in that pane; use `get-command-result` with the returned command ID for non-interactive commands. Use `rawMode: true` for interactive apps (REPLs, editors).
+
+If MCP tmux tools are available, prefer them over the shell wrappers below (no PATH or script install required).
+
+## Fallback: shell commands
+
+When the tmux MCP server is **not** available, ensure `~/.local/scripts` is in PATH and use these whitelisted wrappers:
 
 **Current session, window, pane:**
 ```bash
@@ -26,11 +38,11 @@ Output per line: pane_id pane_index pane_left pane_top pane_right pane_bottom. U
 
 ## Interpreting user references
 
-- **"Left pane" / "left window"** = the tmux pane to the **left** of the pane where the agent is running (same window, pane with smaller x / to the left in layout).
-- **"Right pane" / "right window"** = pane to the **right** of the agent's pane.
+- **"Left pane" / "left window" / "to the left"** = the tmux pane to the **left** of the pane where the agent is running (same window, pane with smaller x / to the left in layout).
+- **"Right pane" / "right window" / "to the right"** = pane to the **right** of the agent's pane.
 - **"Top pane" / "above"** = pane **above** the agent's pane.
 - **"Bottom pane" / "below"** = pane **below** the agent's pane.
 - **"Other pane"** = the other pane in a 2-pane layout, or clarify from context.
-- **"Window 2" / "window N"** = tmux window index N in the current session (from `window_index` or `tmux list-windows`).
+- **"Window 2" / "window N"** = tmux window index N in the current session (from `window_index` or `tmux list-windows` / MCP `list-windows`).
 
-When the user refers to "the left window", "in the other pane", etc., run the tmux commands above to identify your pane and the target pane, then interpret their request accordingly.
+When the user refers to "the left window", "in the other pane", etc., use MCP or the shell commands above to identify your pane and the target pane, then interpret their request accordingly.
