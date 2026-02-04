@@ -53,6 +53,8 @@ Use this normalized string as **project name** for all steps below (session name
 
   so that the left pane is the original and the right is the new one.
 
+  Ensure that when user is attaching to the session, the agent pane will be selected. By default tmux selects last created pane, i.e. the exec pane, so switch focus.
+
 ### 4. Start agent in agent pane
 
 - In the **agent** (left) pane, start a new Cursor agent with the command:
