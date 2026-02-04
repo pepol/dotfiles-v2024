@@ -8,6 +8,10 @@ alwaysApply: true
 
 The agent runs inside a tmux pane. Determine your location and interact with tmux using either the tmux MCP server (when available) or fallback shell commands.
 
+## Executing shell commands
+
+**All executed shell commands must run in the other pane** (the pane that is not the one where the agent/Cursor is running). If the other pane does not exist, create it with a **vertical split** (MCP: `split-pane` with `direction: "vertical"` on the current pane ID; or `tmux split-window -h` in the fallback case). Then run the command in the newly created or existing other pane.
+
 ## Preferred: tmux MCP server
 
 When the **tmux MCP server** is configured and available on this machine, use its tools to get context and run commands:
@@ -16,13 +20,13 @@ When the **tmux MCP server** is configured and available on this machine, use it
 - **Windows:** `list-windows` with a session ID to get window list and IDs.
 - **Panes:** `list-panes` with a window ID to get panes and geometry (use pane positions to resolve left/right/up/down).
 - **Content:** `capture-pane` with a pane ID to read pane output (optionally with `lines` and `colors`).
-- **Run commands:** `execute-command` with a pane ID to run commands in that pane; use `get-command-result` with the returned command ID for non-interactive commands. Use `rawMode: true` for interactive apps (REPLs, editors).
+- **Run commands:** `execute-command` with the **other pane's** ID (create it via `split-pane` with `direction: "vertical"` if needed); use `get-command-result` with the returned command ID for non-interactive commands. Use `rawMode: true` for interactive apps (REPLs, editors).
 
 If MCP tmux tools are available, prefer them over the shell wrappers below (no PATH or script install required).
 
 ## Fallback: shell commands
 
-When the tmux MCP server is **not** available, ensure `~/.local/scripts` is in PATH and use these whitelisted wrappers:
+When the tmux MCP server is **not** available, ensure `~/.local/scripts` is in PATH and use these whitelisted wrappers. When running shell commands, run them in the other pane; if it doesn't exist, create it with `tmux split-window -h` (vertical split), then run the command there.
 
 **Current session, window, pane:**
 ```bash
