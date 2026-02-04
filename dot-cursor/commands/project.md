@@ -12,9 +12,9 @@ This command starts a new project.
 
 Examples: `Test > > > Project` → `test-project`; `My  Cool   App` → `my-cool-app`.
 
-Use this normalized string as **project name** for all steps below.
+Use this normalized string as **project name** for all steps below (session name, work-directory segment, etc.).
 
-**Branch name** (only used when inside a git repository): Ask the user for the name of the branch to create for this project. **Default:** the project name (normalized). Use this as **branch name** in step 1 when creating the worktree.
+**Branch name** (only used when inside a git repository): Ask the user for the name of the branch to create for this project. **Default:** the user’s project name input, normalized for branch names. When using that default, **preserve `/`** in the branch name and normalize the rest the same way as for project name (lowercase; replace any character that is not a letter, digit, hyphen, or `/` with a dash; collapse runs of dashes to a single dash). Example: `/project test/foo-bar` → project name `test-foo-bar`, branch name `test/foo-bar`. Use this **branch name** in step 1 when creating the worktree.
 
 ---
 
