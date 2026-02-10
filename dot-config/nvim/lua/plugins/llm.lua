@@ -49,6 +49,10 @@ return {
         },
         interactions = {
           chat = {
+            adapter = {
+              name = "claude_code",
+              model = "default",
+            },
             icons = {
               chat_context = "ctx",
             },
