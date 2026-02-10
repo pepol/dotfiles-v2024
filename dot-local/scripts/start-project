@@ -24,7 +24,7 @@ if [ -z "$REPO_NAME" ]; then
 fi
 
 # Define paths
-WORKTREE_DIR="$HOME/src/corp/work/$REPO_NAME/$PROJECT_NAME"
+WORKTREE_DIR="$PWD/../$PROJECT_NAME"
 NVIM_SOCKET_DIR="/tmp/tmux"
 NVIM_SOCKET="$NVIM_SOCKET_DIR/$PROJECT_NAME"
 
@@ -49,6 +49,7 @@ tmux split-window -h -t "$PROJECT_NAME"
 tmux send-keys -t "$PROJECT_NAME:$WINDOW.0" "nvim --listen $NVIM_SOCKET" C-m
 
 # On right pane (pane 1), export NVIM variable
+tmux send-keys -t "$PROJECT_NAME:$WINDOW.1" "export NVIM_SOCKET_PATH=\"$NVIM_SOCKET\"" C-m
 tmux send-keys -t "$PROJECT_NAME:$WINDOW.1" "export NVIM=\"$NVIM_SOCKET\"" C-m
 
 # Print information
