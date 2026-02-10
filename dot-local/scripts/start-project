@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Usage: start-project <project-name>
+if [ $# -ne 1 ]; then
+    echo "Usage: start-project <project-name>" >&2
+    exit 1
+fi
+
+PROJECT_NAME="$1"
+
+# Detect repository name from GitHub remote
+REPO_URL=$(git remote get-url origin 2>/dev/null || echo "")
+if [ -z "$REPO_URL" ]; then
+    echo "Error: Not in a git repository or no 'origin' remote found" >&2
+    exit 1
+fi
+
+# Extract repository name from URL (handles both HTTPS and SSH formats)
+REPO_NAME=$(echo "$REPO_URL" | sed -E 's|.*[:/]([^/]+)/([^/]+)\.git$|\2|' | sed 's/\.git$//')
+if [ -z "$REPO_NAME" ]; then
+    echo "Error: Could not extract repository name from remote URL: $REPO_URL" >&2
+    exit 1
+fi
+
+# Define paths
+WORKTREE_DIR="$HOME/src/corp/work/$REPO_NAME/$PROJECT_NAME"
+NVIM_SOCKET_DIR="/tmp/tmux"
+NVIM_SOCKET="$NVIM_SOCKET_DIR/$PROJECT_NAME"
+
+# Create git worktree
+echo "Creating git worktree at $WORKTREE_DIR..."
+git worktree add -b "$PROJECT_NAME" "$WORKTREE_DIR"
+
+# Ensure nvim socket directory exists (handle slashes in project name)
+mkdir -p "$(dirname "$NVIM_SOCKET")"
+
+# Create tmux session
+echo "Creating tmux session '$PROJECT_NAME'..."
+tmux new -d -c "$WORKTREE_DIR" -s "$PROJECT_NAME"
+
+# Get tmux window
+export WINDOW=$(tmux list-windows -F "#I" -t "$PROJECT_NAME")
+
+# Split the session vertically
+tmux split-window -h -t "$PROJECT_NAME"
+
+# On left pane (pane 0), open neovim with socket
+tmux send-keys -t "$PROJECT_NAME:$WINDOW.0" "nvim --listen $NVIM_SOCKET" C-m
+
+# On right pane (pane 1), export NVIM variable
+tmux send-keys -t "$PROJECT_NAME:$WINDOW.1" "export NVIM=\"$NVIM_SOCKET\"" C-m
+
+# Print information
+echo ""
+echo "✓ Project setup complete!"
+echo ""
+echo "Repository:    $REPO_NAME"
+echo "Project:       $PROJECT_NAME"
+echo "Branch:        $PROJECT_NAME"
+echo "Worktree:      $WORKTREE_DIR"
+echo "Tmux session:  $PROJECT_NAME"
+echo "Neovim socket: $NVIM_SOCKET"
+echo ""
+echo "To attach: tmux attach -t $PROJECT_NAME"
