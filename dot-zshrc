@@ -167,3 +167,4 @@ esac
 # pnpm end
 
 export PATH="$PNPM_HOME/nodejs_current/bin:$PATH"
+export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
