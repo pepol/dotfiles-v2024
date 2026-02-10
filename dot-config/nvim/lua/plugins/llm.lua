@@ -31,50 +31,15 @@ return {
     },
     config = function()
       require("codecompanion").setup({
-        strategies = {
-          chat = {
-            adapter = "cursor",
-            slash_commands = {
-              file = default_picker_opts,
-              buffer = default_picker_opts,
-              buffers = default_picker_opts,
-
-              files = default_picker_opts,
-              cwd = default_picker_opts,
-
-              git_file = default_picker_opts,
-              git_files = default_picker_opts,
-              git_diff = default_picker_opts,
-              git_commit = default_picker_opts,
-
-              diagnostic = default_picker_opts,
-              symbols = default_picker_opts,
-
-              help = default_picker_opts,
-              recent = default_picker_opts,
-              time = default_picker_opts,
-              date = default_picker_opts,
-            },
-          },
-        },
         adapters = {
           acp = {
-            opts = {
-              show_presets = false,
-            },
-            cursor = function()
-              return require("codecompanion.adapters.acp").extend("claude_code", {
-                name = "cursor",
-                formatted_name = "Cursor",
-                commands = {
-                  default = {
-                    "pnpm",
-                    "exec",
-                    "cursor-agent-acp",
-                  },
-                },
+            claude_code = function()
+              return require("codecompanion.adapters").extend("claude_code", {
+                env = {
+                  CLAUDE_CODE_OAUTH_TOKEN = "cmd:op read op://Employee/claude-credentials/password --no-newline",
+                }
               })
-            end
+            end,
           },
         },
         display = {
