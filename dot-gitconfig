@@ -96,9 +96,15 @@
 	process = git-lfs filter-process
 	required = true
 
+[url "git@github.com:"]
+  insteadOf = "https://github.com"
+
 [includeIf "gitdir:~/src/corp/"]
   path = ~/.gitconfig-corp
 
 # Needed for corp-specific go modules
 [includeIf "gitdir:~/go/"]
   path = ~/.gitconfig-corp
+
+[includeIf "gitdif:~/src/personal/"]
+  path = ~/.gitconfig-local
