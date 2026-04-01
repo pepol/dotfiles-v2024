@@ -8,6 +8,7 @@ require("config.lazy")
 vim.lsp.enable("gopls")
 vim.lsp.enable("cue")
 vim.lsp.enable("vtsls")
+vim.lsp.enable('rust_analyzer')
 vim.diagnostic.config({ virtual_text = true })
 
 -- Keybindings
