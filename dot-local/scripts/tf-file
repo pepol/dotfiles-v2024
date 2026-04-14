@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -euo pipefail
+
+file=$1
+action=${2:-plan}
+
+echo "Executing ${action} on ${file}"
+
+resources=$(cat $file | grep -E '^(module|resource)' | sed 's/^module "\([^ "]*\)" {$/module.\1/' | sed 's/^resource "\([^ "]*\)" "\([^ "]*\)" {$/\1.\2/')
+
+echo "Will perform ${action} on following resources:"
+echo
+echo "${resources}"
+echo
+
+commandline=$(echo "${resources}" | sed 's/^/-target /' | tr '\n' ' ')
+
+command=$(echo "terraform ${action} ${commandline}")
+
+sh -c "${command}"
