@@ -1,0 +1,24 @@
+theme = "modus_vivendi"
+
+[editor]
+mouse = false
+bufferline = "always"
+color-modes = true
+end-of-line-diagnostics = "hint"
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
+
+[editor.lsp]
+display-inlay-hints = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[keys.normal.space]
+x = ":lsp-workspace-command"
+
+[keys.insert]
+j = { j = "normal_mode" }
