@@ -88,7 +88,8 @@ export LANG=en_US.UTF-8
 # else
 #   export EDITOR='mvim'
 # fi
-export EDITOR="nvim"
+# export EDITOR="nvim"
+export EDITOR="hx"
 export PATH="$HOME/go/bin:$PATH"
 export PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
