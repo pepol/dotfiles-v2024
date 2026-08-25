@@ -1,0 +1,14 @@
+[keys]
+prefix = "ctrl+x"
+
+# tmux-style send-prefix: press ctrl+x (enters prefix mode), then x
+# to forward a literal ctrl+x to the focused pane's shell/program.
+[[keys.command]]
+key = "prefix+x"
+type = "shell"
+command = "herdr pane send-keys \"$HERDR_PANE_ID\" ctrl+x"
+description = "send literal ctrl+x to the pane"
+
+[experimental]
+# Requires a Kitty graphics-compatible outer terminal — Ghostty qualifies.
+kitty_graphics = true
