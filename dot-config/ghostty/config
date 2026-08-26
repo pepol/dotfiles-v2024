@@ -1,1 +1,4 @@
 keybind = global:ctrl+backquote=toggle_quick_terminal
+
+# Send macOS Option as terminal Alt so Alt keybindings work reliably.
+macos-option-as-alt = true
