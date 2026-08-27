@@ -9,6 +9,31 @@ type = "shell"
 command = "herdr pane send-keys \"$HERDR_PANE_ID\" ctrl+x"
 description = "send literal ctrl+x to the pane"
 
+# Swap the focused pane with its adjacent neighbor.
+[[keys.command]]
+key = "prefix+shift+h"
+type = "shell"
+command = "herdr pane swap --current --direction left"
+description = "move pane left"
+
+[[keys.command]]
+key = "prefix+shift+j"
+type = "shell"
+command = "herdr pane swap --current --direction down"
+description = "move pane down"
+
+[[keys.command]]
+key = "prefix+shift+k"
+type = "shell"
+command = "herdr pane swap --current --direction up"
+description = "move pane up"
+
+[[keys.command]]
+key = "prefix+shift+l"
+type = "shell"
+command = "herdr pane swap --current --direction right"
+description = "move pane right"
+
 [experimental]
 # Requires a Kitty graphics-compatible outer terminal — Ghostty qualifies.
 kitty_graphics = true
