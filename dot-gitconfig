@@ -106,5 +106,5 @@
 [includeIf "gitdir:~/go/"]
   path = ~/.gitconfig-corp
 
-[includeIf "gitdif:~/src/personal/"]
+[includeIf "gitdir:~/src/personal/"]
   path = ~/.gitconfig-local
