@@ -72,6 +72,16 @@ type = "shell"
 command = "herdr pane swap --current --direction right"
 description = "move pane right"
 
+# --- Sidebar ----------------------------------------------------------------
+# $n is the positional index that switch_workspace and focus_agent jump to.
+# It has no built-in token, so herdr-sidebar-numbers reports it as workspace
+# and pane metadata; without that running the slot renders empty.
+[ui.sidebar.spaces]
+rows = [[{ token = "$n", dim = true }, "state_icon", "workspace"], ["branch", "git_status"]]
+
+[ui.sidebar.agents]
+rows = [[{ token = "$n", dim = true }, "state_icon", "workspace", "tab"], ["agent"]]
+
 [experimental]
 # Requires a Kitty graphics-compatible outer terminal — Ghostty qualifies.
 kitty_graphics = true

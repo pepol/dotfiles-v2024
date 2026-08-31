@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>dev.herdr.sidebar-numbers</string>
+
+	<!-- Feeds the $n token used by [ui.sidebar.spaces] and [ui.sidebar.agents]
+	     in ~/.config/herdr/config.toml. launchd does not expand ~, so the path
+	     is absolute. -->
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/pepol/.local/scripts/herdr-sidebar-numbers</string>
+		<string>--watch</string>
+	</array>
+
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+
+	<key>RunAtLoad</key>
+	<true/>
+
+	<!-- The watcher exits if the herdr server is not up yet; let launchd retry
+	     rather than busy-looping inside the script. -->
+	<key>KeepAlive</key>
+	<true/>
+	<key>ThrottleInterval</key>
+	<integer>10</integer>
+
+	<key>StandardErrorPath</key>
+	<string>/Users/pepol/Library/Logs/herdr-sidebar-numbers.log</string>
+</dict>
+</plist>

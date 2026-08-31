@@ -1,0 +1,140 @@
+#!/usr/bin/env python3
+"""Mirror herdr's positional indexes into sidebar tokens.
+
+Herdr's sidebar row templates have no built-in token for the index that
+`switch_workspace` (prefix+shift+1..9) and `focus_agent` (prefix+ctrl+1..9)
+jump to, so the numbers have to be fed in as custom metadata. This reports
+each workspace's positional `number` and each agent row's panel position as
+the `$n` token consumed by [ui.sidebar.spaces] and [ui.sidebar.agents].
+
+Only 1..9 are reported, since higher positions have no keybinding.
+
+Usage: herdr-sidebar-numbers --once | --watch
+"""
+
+import json
+import os
+import socket
+import sys
+import threading
+import time
+
+SOURCE = "sidebar-numbers"
+MAX = 9
+
+# Our own writes emit workspace.metadata_updated / pane.updated, so those are
+# deliberately absent here: subscribing to them would loop.
+EVENTS = [
+    "workspace.created",
+    "workspace.closed",
+    "workspace.moved",
+    "workspace.reordered",
+    "pane.agent_detected",
+    "pane.closed",
+    "pane.exited",
+    "pane.moved",
+]
+
+
+def socket_path():
+    if os.environ.get("HERDR_SOCK"):
+        return os.environ["HERDR_SOCK"]
+    config = os.environ.get("XDG_CONFIG_HOME") or os.path.expanduser("~/.config")
+    return os.path.join(config, "herdr", "herdr.sock")
+
+
+def request(method, params):
+    """Send one request. The server serves a single request per connection."""
+    with socket.socket(socket.AF_UNIX) as s:
+        s.settimeout(10)
+        s.connect(socket_path())
+        with s.makefile("rwb") as f:
+            f.write((json.dumps({"id": "sidebar-numbers", "method": method,
+                                 "params": params}) + "\n").encode())
+            f.flush()
+            line = f.readline()
+    if not line:
+        raise OSError(f"no response to {method}")
+    reply = json.loads(line.decode())
+    if "error" in reply:
+        raise OSError(f"{method}: {reply['error'].get('message', reply['error'])}")
+    return reply["result"]
+
+
+def number_token(index):
+    """Positions past the last keybinding get no number rather than a lie."""
+    return str(index) if 1 <= index <= MAX else None
+
+
+def renumber():
+    for space in request("workspace.list", {})["workspaces"]:
+        request("workspace.report_metadata", {
+            "workspace_id": space["workspace_id"],
+            "source": SOURCE,
+            "tokens": {"n": number_token(space["number"])},
+        })
+
+    # Agent panel order under the default agent_panel_sort = "spaces": grouped
+    # by workspace, then tab, then pane -- the order agent.list already returns.
+    for index, agent in enumerate(request("agent.list", {})["agents"], start=1):
+        request("pane.report_metadata", {
+            "pane_id": agent["pane_id"],
+            "source": SOURCE,
+            "tokens": {"n": number_token(index)},
+        })
+
+
+def watch():
+    """Renumber on topology changes, coalescing bursts into one pass."""
+    while True:
+        try:
+            with socket.socket(socket.AF_UNIX) as s:
+                s.connect(socket_path())
+                with s.makefile("rwb") as f:
+                    f.write((json.dumps({
+                        "id": "sidebar-numbers",
+                        "method": "events.subscribe",
+                        "params": {"subscriptions": [{"type": e} for e in EVENTS]},
+                    }) + "\n").encode())
+                    f.flush()
+                    f.readline()  # subscription_started
+
+                    # Subscribing replays a backlog of past events; renumber
+                    # once from live state instead of acting on each replay.
+                    renumber()
+
+                    pending = threading.Event()
+
+                    def apply():
+                        while True:
+                            pending.wait()
+                            time.sleep(0.2)
+                            pending.clear()
+                            try:
+                                renumber()
+                            except OSError as err:
+                                print(f"renumber failed: {err}", file=sys.stderr)
+
+                    threading.Thread(target=apply, daemon=True).start()
+
+                    for _ in f:
+                        pending.set()
+        except (OSError, ValueError, KeyError) as err:
+            print(f"reconnecting after: {err}", file=sys.stderr)
+        time.sleep(2)
+
+
+def main():
+    mode = sys.argv[1] if len(sys.argv) == 2 else ""
+    if mode == "--once":
+        renumber()
+    elif mode == "--watch":
+        watch()
+    else:
+        print(__doc__.strip().splitlines()[-1], file=sys.stderr)
+        return 2
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
