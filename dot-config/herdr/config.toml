@@ -1,35 +1,73 @@
 [keys]
 prefix = "ctrl+x"
 
-# tmux-style send-prefix: press ctrl+x (enters prefix mode), then x
-# to forward a literal ctrl+x to the focused pane's shell/program.
-[[keys.command]]
-key = "prefix+x"
-type = "shell"
-command = "herdr pane send-keys \"$HERDR_PANE_ID\" ctrl+x"
-description = "send literal ctrl+x to the pane"
+# Modifier convention, all after the ctrl+x prefix:
+#   plain hjkl  focus a pane
+#   ctrl+hjkl   move (swap) a pane
+#   shift+hjkl  focus a container: h/l tabs (horizontal), j/k workspaces (vertical)
+#   1..9        tab, shift+1..9 workspace, ctrl+1..9 agent row
+#
+# alt+ is deliberately unused: AeroSpace claims alt+hjkl, alt+1..9, alt+shift+*
+# and alt+tab at the OS level, and Ghostty sets macos-option-as-alt.
+#
+# To send a literal ctrl+x to the focused pane, press the prefix twice.
+# That is built in, so prefix+x stays on its default: close pane.
 
-# Swap the focused pane with its adjacent neighbor.
+# --- Tabs -------------------------------------------------------------------
+# switch_tab (prefix+1..9), new_tab (prefix+c), rename_tab (prefix+shift+t),
+# close_tab (prefix+shift+x) and next/previous_tab (prefix+n / prefix+p)
+# all keep their defaults.
+
+# hjkl-native aliases for prefix+n / prefix+p.
+previous_tab = "prefix+shift+h"
+next_tab = "prefix+shift+l"
+
+# Reorder the current tab within the workspace.
+move_tab_previous = "prefix+comma"
+move_tab_next = "prefix+period"
+
+# --- Workspaces -------------------------------------------------------------
+# The sidebar is vertical, so workspaces move on the j/k axis.
+switch_workspace = "prefix+shift+1..9"
+next_workspace = "prefix+shift+j"
+previous_workspace = "prefix+shift+k"
+
+# --- Agents -----------------------------------------------------------------
+next_agent = "prefix+a"
+previous_agent = "prefix+shift+a"
+
+# ctrl+<digit> has no legacy terminal encoding; this only fires when the outer
+# terminal negotiates the Kitty keyboard protocol. Harmless if it does not.
+focus_agent = "prefix+ctrl+1..9"
+
+# --- Panes ------------------------------------------------------------------
+# focus_pane_* (prefix+hjkl) keeps its default.
+last_pane = "prefix+tab"
+cycle_pane_next = "prefix+space"
+cycle_pane_previous = "prefix+shift+tab"
+
+# Swap the focused pane with its adjacent neighbor. On ctrl rather than shift
+# so the shift layer belongs entirely to tabs and workspaces.
 [[keys.command]]
-key = "prefix+shift+h"
+key = "prefix+ctrl+h"
 type = "shell"
 command = "herdr pane swap --current --direction left"
 description = "move pane left"
 
 [[keys.command]]
-key = "prefix+shift+j"
+key = "prefix+ctrl+j"
 type = "shell"
 command = "herdr pane swap --current --direction down"
 description = "move pane down"
 
 [[keys.command]]
-key = "prefix+shift+k"
+key = "prefix+ctrl+k"
 type = "shell"
 command = "herdr pane swap --current --direction up"
 description = "move pane up"
 
 [[keys.command]]
-key = "prefix+shift+l"
+key = "prefix+ctrl+l"
 type = "shell"
 command = "herdr pane swap --current --direction right"
 description = "move pane right"
